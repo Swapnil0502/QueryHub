@@ -11,4 +11,7 @@ public interface IQuestionService {
     Flux<QuestionResponseDto>searchQuestion(String searchTerm, Pageable pageable);
 
     Mono<QuestionResponseDto> createQuestion(QuestionRequestDto req);
+
+    Flux<QuestionResponseDto>getAllQuestions(String cursor, int size);
+
 }

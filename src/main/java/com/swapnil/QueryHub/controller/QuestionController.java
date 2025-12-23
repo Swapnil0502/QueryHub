@@ -27,4 +27,9 @@ public class QuestionController {
     public Mono<QuestionResponseDto>createQuestion(@RequestBody QuestionRequestDto req){
         return questionService.createQuestion(req);
     }
+
+    @GetMapping
+    public Flux<QuestionResponseDto>getAllQuestions(@RequestParam(required = false) String cursor, @RequestParam(defaultValue = "10") int size){
+        return questionService.getAllQuestions(cursor, size);
+    }
 }

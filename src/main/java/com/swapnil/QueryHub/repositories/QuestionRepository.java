@@ -8,6 +8,9 @@ import reactor.core.publisher.Flux;
 
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Repository
 public interface QuestionRepository extends ReactiveMongoRepository<Question,String> {
     @Query("{'$or' : [" +
@@ -15,4 +18,8 @@ public interface QuestionRepository extends ReactiveMongoRepository<Question,Str
             "{'content' : { $regex : ?0, $options : 'i' }}]" +
             "}")
     Flux<Question>findByTitleOrContentContainingIgnorecase(String searchTerm, Pageable pageable);
+
+    Flux<Question>findByCreatedAtLessThanOrderByCreatedAtDesc(Instant curTimestamp, Pageable pageable);
+
+    Flux<Question>findAllByOrderByCreatedAtDesc();
 }
