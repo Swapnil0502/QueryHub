@@ -26,7 +26,7 @@ public class QuestionService implements IQuestionService{
     @Override
     public Flux<QuestionResponseDto>searchQuestion(String searchTerm, Pageable pageable){
 
-     return questionRepository.findByTitleOrContentContainingIgnorecase(searchTerm, pageable).map(question -> modelMapper.map(question,QuestionResponseDto.class));
+     return questionRepository.findByTitleOrContentContainingIgnoreCase(searchTerm, pageable).map(question -> modelMapper.map(question,QuestionResponseDto.class));
     }
 
     @Override
@@ -39,8 +39,7 @@ public class QuestionService implements IQuestionService{
         Pageable pageable = PageRequest.of(0,size);
 
         if(!CursorUtils.isValidCursor(cursor)){
-            return questionRepository.findAllByOrderByCreatedAtDesc()
-                    .take(size)
+            return questionRepository.findAllByOrderByCreatedAtDesc(pageable)
                     .map(question -> modelMapper.map(question, QuestionResponseDto.class))
                     .doOnError(error -> System.out.println("Error fetching questions: " + error))
                     .doOnComplete(() -> System.out.println("Question fetched successfully"));

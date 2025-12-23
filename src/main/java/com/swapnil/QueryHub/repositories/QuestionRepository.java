@@ -17,9 +17,9 @@ public interface QuestionRepository extends ReactiveMongoRepository<Question,Str
             "{'title' : { $regex : ?0, $options : 'i' }}, " +
             "{'content' : { $regex : ?0, $options : 'i' }}]" +
             "}")
-    Flux<Question>findByTitleOrContentContainingIgnorecase(String searchTerm, Pageable pageable);
+    Flux<Question>findByTitleOrContentContainingIgnoreCase(String searchTerm, Pageable pageable);
 
     Flux<Question>findByCreatedAtLessThanOrderByCreatedAtDesc(Instant curTimestamp, Pageable pageable);
 
-    Flux<Question>findAllByOrderByCreatedAtDesc();
+    Flux<Question>findAllByOrderByCreatedAtDesc(Pageable pageable);
 }
