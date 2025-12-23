@@ -6,12 +6,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class QuoraApplication {
+public class QueryHubApplication {
 
 	public static void main(String[] args) {
 
 		Dotenv dotenv = Dotenv.configure().load();
 		dotenv.entries().forEach((DotenvEntry entry)->System.setProperty(entry.getKey(),entry.getValue()));
-		SpringApplication.run(QuoraApplication.class, args);
+		SpringApplication.run(QueryHubApplication.class, args);
 	}
 }

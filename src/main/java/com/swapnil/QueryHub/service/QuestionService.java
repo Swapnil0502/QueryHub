@@ -4,6 +4,7 @@ import com.swapnil.QueryHub.Dto.QuestionRequestDto;
 import com.swapnil.QueryHub.Dto.QuestionResponseDto;
 import com.swapnil.QueryHub.models.Question;
 import com.swapnil.QueryHub.repositories.QuestionRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -11,16 +12,11 @@ import reactor.core.publisher.Mono;
 import org.springframework.data.domain.Pageable;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class QuestionService implements IQuestionService{
 
     private final QuestionRepository questionRepository;
     private final ModelMapper modelMapper;
-
-    QuestionService(QuestionRepository _q,ModelMapper _mm){
-        this.modelMapper = _mm;
-        this.questionRepository = _q;
-    }
 
     @Override
     public Flux<QuestionResponseDto>searchQuestion(String searchTerm, Pageable pageable){
