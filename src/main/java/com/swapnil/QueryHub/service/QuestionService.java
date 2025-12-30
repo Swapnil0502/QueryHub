@@ -2,7 +2,9 @@ package com.swapnil.QueryHub.service;
 
 import com.swapnil.QueryHub.Dto.QuestionRequestDto;
 import com.swapnil.QueryHub.Dto.QuestionResponseDto;
+import com.swapnil.QueryHub.events.ViewCountEvent;
 import com.swapnil.QueryHub.models.Question;
+import com.swapnil.QueryHub.producers.KafkaEventProducer;
 import com.swapnil.QueryHub.repositories.QuestionRepository;
 import com.swapnil.QueryHub.utils.CursorUtils;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class QuestionService implements IQuestionService{
 
     private final QuestionRepository questionRepository;
     private final ModelMapper modelMapper;
+    private final KafkaEventProducer kafkaEventProducer;
 
     @Override
     public Flux<QuestionResponseDto>searchQuestion(String searchTerm, Pageable pageable){
@@ -54,6 +57,12 @@ public class QuestionService implements IQuestionService{
         @Override
         public Mono<QuestionResponseDto> getQuestionById(String id){
             return questionRepository.findById(id)
-                    .map(question -> modelMapper.map(question, QuestionResponseDto.class));
+                    .map(question -> modelMapper.map(question, QuestionResponseDto.class))
+                    .doOnError(error -> System.out.println("Error fetching the question: " + error))
+                    .doOnSuccess(response -> {
+                        System.out.println("Question Fetched Successfully: " + response);
+                        ViewCountEvent viewCountEvent = new ViewCountEvent(id, "question", Instant.now());
+                        kafkaEventProducer.publishViewCount(viewCountEvent);
+                    });
         }
 }
