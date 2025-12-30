@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/question")
 public class QuestionController {
 
     private final IQuestionService questionService;
@@ -31,5 +31,10 @@ public class QuestionController {
     @GetMapping
     public Flux<QuestionResponseDto>getAllQuestions(@RequestParam(required = false) String cursor, @RequestParam(defaultValue = "10") int size){
         return questionService.getAllQuestions(cursor, size);
+    }
+
+    @GetMapping("/{id}")
+    public Mono<QuestionResponseDto> getQuestionById(@PathVariable String id){
+        return questionService.getQuestionById(id);
     }
 }

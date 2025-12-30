@@ -14,4 +14,5 @@ public interface IQuestionService {
 
     Flux<QuestionResponseDto>getAllQuestions(String cursor, int size);
 
+    Mono<QuestionResponseDto> getQuestionById(String id);
 }

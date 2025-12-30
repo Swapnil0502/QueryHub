@@ -35,16 +35,15 @@ public class QuestionService implements IQuestionService{
     }
 
     @Override
-    public Flux<QuestionResponseDto>getAllQuestions(String cursor, int size){
-        Pageable pageable = PageRequest.of(0,size);
+    public Flux<QuestionResponseDto>getAllQuestions(String cursor, int size) {
+        Pageable pageable = PageRequest.of(0, size);
 
-        if(!CursorUtils.isValidCursor(cursor)){
+        if (!CursorUtils.isValidCursor(cursor)) {
             return questionRepository.findAllByOrderByCreatedAtDesc(pageable)
                     .map(question -> modelMapper.map(question, QuestionResponseDto.class))
                     .doOnError(error -> System.out.println("Error fetching questions: " + error))
                     .doOnComplete(() -> System.out.println("Question fetched successfully"));
-        }
-        else{
+        } else {
             Instant curTimestamp = CursorUtils.parseCursor(cursor);
             return questionRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(curTimestamp, pageable)
                     .map(question -> modelMapper.map(question, QuestionResponseDto.class))
@@ -52,4 +51,9 @@ public class QuestionService implements IQuestionService{
                     .doOnComplete(() -> System.out.println("Question fetched successfully"));
         }
     }
+        @Override
+        public Mono<QuestionResponseDto> getQuestionById(String id){
+            return questionRepository.findById(id)
+                    .map(question -> modelMapper.map(question, QuestionResponseDto.class));
+        }
 }
