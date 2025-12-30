@@ -37,3 +37,4 @@ out/
 .vscode/
 
 .env
+java_pid15260.hprof java_pid3324.hprof
