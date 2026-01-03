@@ -10,6 +10,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/question")
@@ -36,5 +38,10 @@ public class QuestionController {
     @GetMapping("/{id}")
     public Mono<QuestionResponseDto> getQuestionById(@PathVariable String id){
         return questionService.getQuestionById(id);
+    }
+
+    @GetMapping("/searchElastic")
+    public List<QuestionResponseDto> searchQuestionByElasticSearch(@RequestParam String query){
+        return questionService.searchQuestionByElasticSearch(query);
     }
 }
